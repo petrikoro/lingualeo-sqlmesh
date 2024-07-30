@@ -242,10 +242,9 @@ class AirflowSchedulerConfig(_BaseAirflowSchedulerConfig, BaseConfig):
 
     def get_client(self, console: t.Optional[Console] = None) -> AirflowClient:
         session = Session()
-        if self.token is None:
-            session.auth = (self.username, self.password)
-        else:
-            session.headers.update({"Authorization": f"Bearer {self.token}"})
+        session.auth = (self.username, self.password)
+        if self.token:
+            session.headers.update({"X-Cloud-Authorization": f"Bearer {self.token}"})
 
         return AirflowClient(
             session=session,
